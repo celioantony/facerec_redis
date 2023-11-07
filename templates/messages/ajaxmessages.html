@@ -1,0 +1,5 @@
+<div id="id_messages" class="messages">
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} animate__animated animate__fadeInUp" role="alert">{{ message }}</div>
+  {% endfor %}
+</div>

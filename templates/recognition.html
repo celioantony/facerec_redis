@@ -1,0 +1,50 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% comment %}REF: https://www.digitalocean.com/community/tutorials/front-and-rear-camera-access-with-javascripts-getusermedia{% endcomment %}
+{% block container %}
+  <div class="row">
+    <div class="col">
+      <div class="display-cover">
+        <div id="display-cover-overlay" class="display-cover-overlay d-none">
+          {% comment %} <div class="display-cover-face"></div> {% endcomment %}
+          <div class="display-animation-face">
+            {% include 'animation-circle.html' %}
+          </div>
+        </div>
+        {% comment %} <div class="display-cover-face"></div> {% endcomment %}
+        <video autoplay></video>
+        <canvas class="d-none"></canvas>
+        
+        <div class="video-options">
+          <select name="" id="" class="custom-select">
+            <option value="">Select camera</option>
+          </select>
+        </div>
+
+        <div class="screenshot-preview animate__animated animate__backInRight">
+          <img id="screenshot-image" class="screenshot-preview-img" alt="" />
+          <div class="screenshot-preview-name"><span class="preview-name"></span></div>
+        </div>
+
+                
+        <div class="controls">
+          <button class="btn btn-success play" title="Play"><span class="material-symbols-outlined">play_circle</span></button>
+          <button class="btn btn-info pause d-none" title="Pause"><span class="material-symbols-outlined">pause_circle</span></button>
+          <button class="btn btn-outline-success screenshot d-none" title="ScreenShot"><span class="material-symbols-outlined">capture</span></button>
+          {% comment %} <button class="btn btn-outline-secondary recognition d-none" title="ScreenShot"><span class="material-symbols-outlined">cloud_upload</span></button> {% endcomment %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col text-center">
+      <button type="button" class="btn btn-primary d-none">Enviar e abrir carrinho</button>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'recognition.js' %}"></script>
+{% endblock %}
