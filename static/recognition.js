@@ -97,7 +97,6 @@ window.addEventListener('load', function () {
             contentType: false,
             processData: false,
             success: function (response) {
-                console.log('response: ', response)
                 displayMessages(response.messages);
                 if (response.recognized_names.length > 0) {
                     $(".preview-name").html("Olá, <br>" + response.recognized_names[0]);

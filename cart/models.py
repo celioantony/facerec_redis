@@ -1,8 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
-from product.models import Product
 
-
+class Product(models.Model):
+    name = models.CharField(max_length=255)
+    barcode = models.CharField(max_length=255)
+    price = models.FloatField()
+    image = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=255)
+    
+    
 class Cart(models.Model):
     OPEN='OP'
     IN_PROGRESS='IP'
@@ -22,3 +27,5 @@ class AddedProducts(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     quantity = models.IntegerField(default=1)
     total = models.FloatField()
+
+

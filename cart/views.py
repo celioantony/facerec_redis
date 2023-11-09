@@ -5,22 +5,19 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, HttpResponse
 from django.http import JsonResponse
 from django.contrib.auth.models import User
-from .models import Cart, AddedProducts
-from product.models import Product
+from .models import Cart, AddedProducts, Product
 from faces.recognition import face_location
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.template import RequestContext
-
+from faces.training import training
 
 def cart(request):
     return render(request, 'cart.html', {})
 
 
 def recognition(request):
-    messages.add_message(request, messages.INFO, 'Reconhecimento facial')
     return render(request, 'recognition.html', {})
-
 
 @csrf_exempt
 def face_recognition_image(request):
