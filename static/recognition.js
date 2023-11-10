@@ -1,5 +1,6 @@
 window.addEventListener('load', function () {
 
+    const isTraining = document.querySelector("#id_training").getAttribute("training") == 'true';
     const controls = document.querySelector('.controls');
     const cameraOptions = document.querySelector('.video-options>select');
     const video = document.querySelector('video');
@@ -8,9 +9,14 @@ window.addEventListener('load', function () {
     const screenshotPreview = document.querySelector('.screenshot-preview');
     const animationPhoto = document.querySelector('#display-cover-overlay');
     const buttons = [...controls.querySelectorAll('button')];
+    const TRAINING_LIMIT = 20 // seconds
     let streamStarted = false;
 
     const [play, pause, screenshot] = buttons;
+
+    // enable animation if is training
+    if (isTraining)
+        animationPhoto.classList.remove('d-none');
 
     const constraints = {
         video: {
@@ -46,6 +52,7 @@ window.addEventListener('load', function () {
             pause.classList.remove('d-none');
             return;
         }
+
         if ('mediaDevices' in navigator && navigator.mediaDevices.getUserMedia) {
             const updatedConstraints = {
                 ...constraints,
@@ -53,9 +60,12 @@ window.addEventListener('load', function () {
                     exact: cameraOptions.value
                 }
             };
+
             startStream(updatedConstraints);
+
             animationPhoto.classList.remove('d-none');
             screenshotPreview.classList.add('d-none');
+
             $(".preview-name").html("");
         }
 
@@ -66,6 +76,10 @@ window.addEventListener('load', function () {
         play.classList.remove('d-none');
         pause.classList.add('d-none');
         animationPhoto.classList.add('d-none');
+
+        if (isTraining) {
+            pauseCron()
+        }
     };
 
     const base64ToBlob = (dataURI) => {
@@ -119,19 +133,27 @@ window.addEventListener('load', function () {
         const dx = 0;
         const dy = 0;
 
-        
+
         canvas.getContext('2d').drawImage(video, sx, sy, sw, sh, dx, dy, 200, 300);
         screenshotImage.src = canvas.toDataURL('image/png');
         screenshotImage.classList.remove('d-none');
         // recognition.classList.remove('d-none');
         screenshotPreview.classList.remove('d-none');
 
-        setTimeout(() => {
-            doRecognition();
-        }, 1000);
+        if (!isTraining) {
+            setTimeout(() => {
+                doRecognition();
+            }, 1000);
+            // pauseStream
+            pauseStream();
+        } else if (isTraining) {
+            // animation
+            // screenshotPreview.classList.remove('animate__backInRight');
+            setTimeout(() => {
+                screenshotPreview.classList.add('d-none');
+            }, 1200);
+        }
 
-        // pauseStream
-        pauseStream();
     };
 
     pause.onclick = pauseStream;
@@ -150,6 +172,15 @@ window.addEventListener('load', function () {
         pause.classList.remove('d-none');
         screenshot.classList.remove('d-none');
 
+        // if page is training
+        if (isTraining) {
+            screenshot.classList.add('d-none');
+
+            startCron();
+            screenshotInter = setInterval(() => {
+                doScreenshot();
+            }, 2000);
+        }
     };
 
 
@@ -163,4 +194,67 @@ window.addEventListener('load', function () {
     };
 
     getCameraSelection();
+
+    // cron
+
+    let hour = 0;
+    let minute = 0;
+    let second = 0;
+    let millisecond = 0;
+    let cron;
+
+    const elHour = document.querySelector('#hour');
+    const elMinute = document.querySelector('#minute');
+    const elSecond = document.querySelector('#second');
+    const elMillisecond = document.querySelector('#millisecond');
+
+    const format = (value) => {
+        return value >= 10 ? value : `0${value}`
+    }
+
+    const timer = () => {
+        if ((millisecond += 10) == 1000) {
+            millisecond = 0;
+            second++;
+        }
+        if (second == 60) {
+            second = 0;
+            minute++;
+        }
+        if (minute == 60) {
+            minute = 0;
+            hour++;
+        }
+
+        if (second == TRAINING_LIMIT) {
+            pauseCron();
+        }
+
+        elHour.innerText = format(hour);
+        elMinute.innerText = format(minute);
+        elSecond.innerText = format(second);
+        elMillisecond.innerText = format(millisecond);
+    }
+
+    const startCron = () => {
+        pauseCron();
+        cron = setInterval(() => { timer(); }, 10)
+    }
+
+    const pauseCron = () => {
+        clearInterval(cron);
+    }
+
+    const resetCron = () => {
+        hour = 0;
+        minute = 0;
+        second = 0;
+        millisecond = 0;
+
+        elHour.innerHTML = '00';
+        elMinute = '00';
+        elSecond = '00';
+        elMillisecond = '0000';
+    }
+
 });

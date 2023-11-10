@@ -2,8 +2,8 @@ import os
 import face_recognition
 import struct
 import numpy as np
-from facerec_shopping_cart.settings import BASE_DIR
-from facerec_shopping_cart.settings import REDIS_CONN
+from facerec_redis.settings import BASE_DIR
+from facerec_redis.settings import REDIS_CONN
 from .utils import to_redis
 
 client = REDIS_CONN

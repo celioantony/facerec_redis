@@ -1,8 +1,8 @@
 import os
 import numpy as np
 import face_recognition
-from facerec_shopping_cart.settings import BASE_DIR
-from facerec_shopping_cart.settings import REDIS_CONN
+from facerec_redis.settings import BASE_DIR
+from facerec_redis.settings import REDIS_CONN
 from .utils import bytes_to_nparray
 
 client = REDIS_CONN

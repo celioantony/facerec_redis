@@ -1,4 +1,4 @@
-from facerec_shopping_cart.settings import REDIS_CONN
+from facerec_redis.settings import REDIS_CONN
 import numpy as np
 import base64
 

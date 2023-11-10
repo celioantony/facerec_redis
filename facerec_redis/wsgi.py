@@ -1,5 +1,5 @@
 """
-WSGI config for facerec_shopping_cart project.
+WSGI config for facerec_redis project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'facerec_shopping_cart.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'facerec_redis.settings')
 
 application = get_wsgi_application()

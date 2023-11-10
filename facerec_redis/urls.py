@@ -1,5 +1,5 @@
 """
-URL configuration for facerec_shopping_cart project.
+URL configuration for facerec_redis project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -18,6 +18,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    path('facerec/', include('facerecognition.urls')),
     path('admin/', admin.site.urls),
-    path('cart/', include('cart.urls'))
 ]

@@ -1,5 +1,5 @@
 """
-ASGI config for facerec_shopping_cart project.
+ASGI config for facerec_redis project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'facerec_shopping_cart.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'facerec_redis.settings')
 
 application = get_asgi_application()
