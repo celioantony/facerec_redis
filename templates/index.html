@@ -1,0 +1,22 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block container %}
+  {% include "navbar.html" with title="Reconhecimento facial" %}
+  <div class="row">
+    <div class="col mt-5 text-center">
+      <h1>Reconhecimento facil</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+      <span class="material-symbols-outlined" style="font-size: 300px;">center_focus_strong</span>
+      <a href="{% url 'recognition' %}" type="button" class="btn btn-primary btn-lg">Fazer reconhecimento facial</a>
+    </div>
+    <div class="col" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+      <span class="material-symbols-outlined" style="font-size: 300px;">photo_camera_front</span>
+      <a href="{% url 'training' %}" type="button" class="btn btn-secondary btn-lg">Treinar reconhecimento facial</a>
+    </div>
+  </div>
+{% endblock %}

@@ -2,7 +2,7 @@ import os
 import base64
 from PIL import Image
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from faces.recognition import face_location
 from django.contrib import messages
@@ -10,6 +10,14 @@ from django.template.loader import render_to_string
 from facerec_redis.settings import BASE_DIR
 from faces.training import training_by_user
 from unidecode import unidecode
+
+
+def redirect_page(request):
+    return redirect('/facerec')
+    
+    
+def index(request):
+    return render(request, 'index.html', {})
 
 
 def recognition(request):

@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from facerecognition.views import redirect_page
 
 urlpatterns = [
+    path('', redirect_page),
     path('facerec/', include('facerecognition.urls')),
     path('admin/', admin.site.urls),
 ]
