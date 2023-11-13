@@ -92,6 +92,7 @@ window.addEventListener('load', function () {
 
     const handleRecognitionFn = () => {
         const blob = base64ToBlobFn(screenshotImage.src);
+        $(".preview-name").html("");
 
         var formData = new FormData();
         formData.append('file', blob);

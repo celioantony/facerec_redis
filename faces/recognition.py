@@ -54,7 +54,6 @@ def known_faces():
 
 def face_location(unknown_face):
 
-    faces_keys_iter = client.scan_iter('faces:*')
 
     def get_name(hkey):
         partial_key = hkey.decode('utf-8').split(':')[1]
@@ -63,6 +62,7 @@ def face_location(unknown_face):
     faces_map = dict()
     known_faces_names_index = []
     known_faces_encodings = []
+    faces_keys_iter = client.scan_iter('faces:*')
     for index, hkey in enumerate(faces_keys_iter, start=0):
         faces_map[index] = get_name(hkey)
 
@@ -78,7 +78,7 @@ def face_location(unknown_face):
     unknown_face = face_recognition.load_image_file(unknown_face)
     unknown_face_encodings = face_recognition.face_encodings(unknown_face)
 
-    if len(unknown_face_encodings) > 0:
+    if len(unknown_face_encodings) > 0 and len(known_faces_encodings) > 0:
 
         unknown_face_encodings = unknown_face_encodings
 

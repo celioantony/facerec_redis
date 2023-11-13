@@ -1,6 +1,4 @@
 import os
-import face_recognition
-import struct
 import numpy as np
 from facerec_redis.settings import BASE_DIR
 from facerec_redis.settings import REDIS_CONN
@@ -26,8 +24,6 @@ def get_faces(facename=None, fullpath=None):
     def is_not_none(path):
         return path != None
     
-    print(facesdir)
-
     for facename, facedir in facesdir:
 
         if not client.exists(f'user:{facename}'):
