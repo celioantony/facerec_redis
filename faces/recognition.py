@@ -10,8 +10,8 @@ client = REDIS_CONN
 
 def get_faces():
     faces = []
-    facesdir = [(folder, BASE_DIR / 'upload' / folder)
-                for folder in os.listdir(BASE_DIR / 'upload')]
+    facesdir = [(folder, BASE_DIR / 'datatraining' / folder)
+                for folder in os.listdir(BASE_DIR / 'datatraining')]
 
     def get_files(dirname):
         for file in os.listdir(dirname):

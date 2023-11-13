@@ -8,10 +8,15 @@ from .utils import to_redis
 
 client = REDIS_CONN
 
-def get_faces():
+def get_faces(facename=None, fullpath=None):
     faces = []
-    facesdir = [(folder, BASE_DIR / 'upload' / folder)
-                for folder in os.listdir(BASE_DIR / 'upload')]
+    
+    facesdir = None
+    if facename and fullpath:
+        facesdir = [(facename, fullpath)]
+    else:
+        facesdir = [(folder, BASE_DIR / 'datatraining' / folder)
+                    for folder in os.listdir(BASE_DIR / 'datatraining')]
 
     def get_files(dirname):
         for file in os.listdir(dirname):
@@ -20,6 +25,8 @@ def get_faces():
 
     def is_not_none(path):
         return path != None
+    
+    print(facesdir)
 
     for facename, facedir in facesdir:
 
@@ -31,8 +38,10 @@ def get_faces():
     return faces
 
 
-def training():
-    faces = get_faces()
+def training(faces=None):
+    
+    if not faces:
+        faces = get_faces()
 
     for facename, facepaths in faces:
         hkey = f'faces:{facename}'
@@ -47,3 +56,7 @@ def training():
                 # persiste treining to redis
                 encoded = to_redis(face_encoding)
                 client.hset(hkey, mapping={mapkey: encoded})
+
+def training_by_user(facename, path):
+    faces = get_faces(facename, path)
+    training(faces)
