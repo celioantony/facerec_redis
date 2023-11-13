@@ -1,8 +1,5 @@
 window.addEventListener('load', function () {
 
-    // flag if is training
-    const isTraining = document.querySelector("#id_training").getAttribute("training") == 'true';
-
     // tag controls in video
     const controls = document.querySelector('.controls');
     const buttons = [...controls.querySelectorAll('button')];
@@ -18,21 +15,7 @@ window.addEventListener('load', function () {
     const screenshotPreview = document.querySelector('.screenshot-preview');
     const animationPhoto = document.querySelector('#display-cover-overlay');
 
-    const buttonsInput = [...inputControls.querySelectorAll('button')]
-    const training = document.querySelector('#send-training');
-    const resetTraining = document.querySelector('#reset-training');
-    const inputFacename = document.querySelector('#input-facename');
-    const trainingPreview = $(".training-preview")
-    const TRAINING_LIMIT = 20 // seconds
     let streamStarted = false;
-    let trainingImages = [];
-
-
-    const [save, edit] = buttonsInput;
-
-    // enable animation if is training
-    if (isTraining)
-        animationPhoto.classList.remove('d-none');
 
     const constraints = {
         video: {
@@ -93,8 +76,6 @@ window.addEventListener('load', function () {
         play.classList.remove('d-none');
         pause.classList.add('d-none');
         animationPhoto.classList.add('d-none');
-
-        pauseStreamTrainingFn();
     };
 
     const startStreamFn = async (constraints) => {
@@ -102,14 +83,11 @@ window.addEventListener('load', function () {
         handleStreamFn(stream);
     };
 
-
     const handleStreamFn = (stream) => {
         video.srcObject = stream;
         play.classList.add('d-none');
         pause.classList.remove('d-none');
         screenshot.classList.remove('d-none');
-
-        handleStreamTrainingFn();
     };
 
     const handleRecognitionFn = () => {
@@ -137,34 +115,6 @@ window.addEventListener('load', function () {
         });
     }
 
-    const handleTrainingFn = () => {
-
-        var facename = inputFacename.value;
-        var formData = new FormData();
-        formData.append('facename', facename);
-        trainingFiles.forEach((item, index) => {
-            let blob = base64ToBlobFn(item);
-            formData.append(`files[]`, blob);
-        });
-
-        $.ajax({
-            type: 'POST',
-            url: 'http://localhost:8000/facerec/uploadtraining',
-            data: formData,
-            async: false,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                displayMessages(response.messages);
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        })
-
-
-    }
-
     const handleScreenshotFn = () => {
 
         canvas.width = 200;
@@ -181,17 +131,12 @@ window.addEventListener('load', function () {
         screenshotImage.src = canvas.toDataURL('image/png');
         screenshotImage.classList.remove('d-none');
         // recognition.classList.remove('d-none');
-        screenshotPreview.classList.remove('d-none');
+        screenshotPreview.classList.remove('d-none');        
 
-        // if it's not training
-        if (!isTraining) {
-            setTimeout(() => {
-                handleRecognitionFn();
-            }, 1000);
-            pauseStreamFn();
-        }
-
-        handleScreenshotTrainingFn();
+        setTimeout(() => {
+            handleRecognitionFn();
+        }, 1000);
+        pauseStreamFn();
 
     };
 
@@ -205,168 +150,12 @@ window.addEventListener('load', function () {
         cameraOptions.innerHTML = options.join('');
     };
 
-
-    // cron
-
-    let hour = 0;
-    let minute = 0;
-    let second = 0;
-    let millisecond = 0;
-    let cron;
-
-    const elHour = document.querySelector('#hour');
-    const elMinute = document.querySelector('#minute');
-    const elSecond = document.querySelector('#second');
-    const elMillisecond = document.querySelector('#millisecond');
-    let screenshotInter;
-
-    const formatFn = (value) => {
-        return value >= 10 ? value : `0${value}`
-    }
-
-    const timerFn = () => {
-        if ((millisecond += 10) == 1000) {
-            millisecond = 0;
-            second++;
-        }
-        if (second == 60) {
-            second = 0;
-            minute++;
-        }
-        if (minute == 60) {
-            minute = 0;
-            hour++;
-        }
-
-        if (second == TRAINING_LIMIT) {
-            pauseCronFn();
-            clearInterval(screenshotInter);
-            pauseStreamFn();
-            training.classList.remove('d-none');
-        }
-
-        elHour.innerText = formatFn(hour);
-        elMinute.innerText = formatFn(minute);
-        elSecond.innerText = formatFn(second);
-        elMillisecond.innerText = formatFn(millisecond);
-    }
-
-    const startCronFn = () => {
-        cron = setInterval(() => { timer(); }, 10)
-        screenshotInter = setInterval(() => {
-            handleScreenshotFn();
-        }, 2000);
-    }
-
-    const pauseCronFn = () => {
-        clearInterval(cron);
-        resetCron();
-    }
-
-    const resetCronFn = () => {
-        hour = 0;
-        minute = 0;
-        second = 0;
-        millisecond = 0;
-
-        elHour.innerHTML = '00';
-        elMinute.innerHTML = '00';
-        elSecond.innerHTML = '00';
-        elMillisecond.innerHTML = '0000';
-    }
-
-    // TRAINING PAGE
-
-    const handleStreamTrainingFn = () => {
-        // if page is training
-        if (isTraining) {
-            screenshot.classList.add('d-none');
-            edit.classList.add('d-none');
-            trainingImages = [];
-            startCron();
-        }
-    }
-
-    const pauseStreamTrainingFn = () => {
-        if (isTraining) {
-            pauseCron();
-            clearInterval(screenshotInter);
-            play.classList.add('d-none');
-            resetTraining.classList.remove('d-none');
-        }
-    }
-
-    const handleScreenshotTrainingFn = () => {
-        // if it's training
-        if (isTraining) {
-            trainingImages.push(canvas.toDataURL('image/png'));
-            previewImages(canvas.toDataURL('image/png')); // preview images
-            setTimeout(() => {
-                screenshotPreview.classList.add('d-none');
-            }, 1200);
-        }
-    }
-
-    const resetTrainingFacesFn = () => {
-        trainingFiles = [];
-        inputFacename.value = '';
-        trainingPreview.html('');
-        training.classList.add('d-none');
-        inputFacename.removeAttribute('disabled', 'disabled');
-        save.classList.remove('d-none');
-        resetTraining.classList.add('d-none');
-    }
-
-    const previewImages = (base64img) => {
-        // image preview
-        $div = $('<div class="col animate__animated animate__backInRight"></div>');
-        $img = $(`<img width="60" src="${base64img}" class="img-thumbnail">`)
-        $a = $(`<a href="${base64img}" data-lightbox="roadtrip" data-title=""></a>`);
-        $a.html($img);
-        $div.append($a);
-
-        trainingPreview.append($div);
-    }
-
-    const facenameSaveFn = () => {
-
-        value = inputFacename.value;
-
-        if (value == '' || value == undefined || value == null) {
-            message("Campo é obrigatório.", "warning");
-            return;
-        }
-
-        if (value.length < 4) {
-            message("Campo deve ter no mínimo 4 caracteres.", "warning");
-            return;
-        }
-
-        play.classList.remove('d-none');
-        inputFacename.setAttribute('disabled', 'disabled')
-        save.classList.add('d-none');
-        edit.classList.remove('d-none');
-    }
-
-    const facenameEditFn = () => {
-        play.classList.add('d-none');
-        inputFacename.removeAttribute('disabled', 'disabled')
-        save.classList.remove('d-none');
-        edit.classList.add('d-none');
-    }
-
     // call
 
-    getCameraSelection();
+    getCameraSelectionFn();
 
     // camera
     pause.onclick = pauseStreamFn;
     screenshot.onclick = handleScreenshotFn;
-    training.onclick = handleTrainingFn;
-
-    // face training
-    save.onclick = facenameSaveFn;
-    edit.onclick = facenameEditFn;
-    resetTraining.onclick = resetTrainingFacesFn;
 
 });

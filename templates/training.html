@@ -51,7 +51,8 @@
       <div style="display: inline-flex; width: 100%; justify-content: center; align-items: center;">
         <div class="mb-3" style="width: 80%;">
           <label for="facename" class="form-label">Nome da face</label>
-          <input type="text" class="form-control" id="input-facename" placeholder="Ex: Cleiton Silva...">
+          <input type="text" class="form-control" id="input-facename" 
+            placeholder="Ex: Cleiton Silva...">
           <div id="input-facename-help" class="form-text">
             O nome deve ter no mínimo 4 caracteres.
           </div>
@@ -68,7 +69,7 @@
     <div class="col">
       <div style="display: inline-flex; width: 100%; justify-content: center; align-items: center;">
         <div style="width: 50%; display: inline-flex; align-items: center;">
-          <h4>Faces para trinamento</h4>
+          <h4>Faces para treinamento</h4>
         </div>
         <div style="width: 30%; display: inline-flex; justify-content: end;">
           <button id="reset-training" type="button" class="btn btn-primary reset_raining mt-3 mb-3 d-none">Novo treinamento</button>
@@ -92,5 +93,5 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src="{% static 'recognition.js' %}"></script>
+  <script src="{% static 'training.js' %}"></script>
 {% endblock %}

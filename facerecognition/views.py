@@ -9,6 +9,8 @@ from django.contrib import messages
 from django.template.loader import render_to_string
 from facerec_redis.settings import BASE_DIR
 from faces.training import training_by_user
+from unidecode import unidecode
+
 
 def recognition(request):
     return render(request, 'recognition.html', {})
@@ -23,9 +25,10 @@ def face_upload_training(request):
     is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
     if request.method == 'POST' and is_ajax:
         
-        facename = request.POST.get('facename') or None        
+        facename = request.POST.get('facename') or None
         files = request.FILES.getlist('files[]')
         
+        facename = unidecode(facename).lower()
         facename = '_'.join(facename.split(' '))
         fullpath = BASE_DIR / 'datatraining' / facename
         

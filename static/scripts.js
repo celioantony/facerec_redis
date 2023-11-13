@@ -9,7 +9,7 @@ function displayMessages(htmlMessages) {
 function message(msg, type) {
     $divMsg = $('<div id="id_messages" class="messages"></div>');
     $divAlert = $(`<div class="alert alert-${type} animate__animated animate__fadeInUp" role="alert"></div>`);
-    
+
     $divAlert.html(msg)
     $divMsg.html($divAlert);
 
@@ -17,19 +17,19 @@ function message(msg, type) {
 }
 
 // declare all characters
-const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
 function generateString(length) {
     let result = ' ';
     const charactersLength = characters.length;
-    for ( let i = 0; i < length; i++ ) {
+    for (let i = 0; i < length; i++) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
 
     return result;
 }
 
-function base64ToBlobFn (dataURI) {
+function base64ToBlobFn(dataURI) {
     var bytesString = atob(dataURI.split(',')[1]);
     var mime = dataURI.split(',')[0].split(':')[1].split(';')[0];
     var arrayBuffer = new ArrayBuffer(bytesString.length);
@@ -42,4 +42,13 @@ function base64ToBlobFn (dataURI) {
     var blob = new Blob([arrayBuffer], { type: mime });
 
     return blob;
+}
+
+function lettersOnly(event) {
+    var charCode = event.keyCode;
+
+    if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8)
+        return true;
+    else
+        return false;
 }
