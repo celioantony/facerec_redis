@@ -13,7 +13,7 @@
 
 /* messages */
 
-.messages {
+.messages, .ajaxmessages {
   position: fixed;
   width: 80%;
   margin: auto;
@@ -220,4 +220,60 @@ svg {
 .st4 {
   stroke-width: 1;
   stroke-linecap: square;
+}
+
+
+/* queries */
+
+@media (max-width: 575.98px) {
+
+  .display-cover {
+    height: 775px;
+  }
+
+  .screenshot-preview {
+    width: 80px;
+    height: 150px;
+    top: 60px;
+    right: 15px;
+  }
+
+  video {
+    height: 775px;
+  }
+
+  svg {
+    width: 300px;
+  }
+
+}
+
+@media (max-width: 767.98px) { 
+
+  .screenshot-preview {
+    width: 80px;
+    height: 150px;
+    top: 10px;
+    right: 10px;
+  }
+
+  svg {
+    width: 200px;
+  }
+
+}
+
+@media (max-width: 991.98px) { 
+
+  .screenshot-preview {
+    width: 80px;
+    height: 150px;
+    top: 10px;
+    right: 10px;
+  }
+
+  svg {
+    width: 200px;
+  }
+  
 }

@@ -50,7 +50,7 @@ def face_upload_training(request):
         # training redis
         training_by_user(facename, fullpath)
 
-        messages.add_message(request, messages.SUCCESS, 'Trainamento finalizado.')
+        messages.add_message(request, messages.SUCCESS, 'Treinamento realizado com sucesso.')
         
         response = dict()
         response['messages'] = render_to_string('messages/ajaxmessages.html', {},  request)
