@@ -78,4 +78,4 @@ $ docker compose up -d
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT]([https://choosealicense.com/licenses/mit/](https://github.com/celioantony/facerec_redis/blob/main/LICENSE)https://github.com/celioantony/facerec_redis/blob/main/LICENSE)
