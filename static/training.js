@@ -149,7 +149,7 @@ window.addEventListener('load', function () {
 
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:8000/facerec/uploadtraining',
+            url: '/facerec/uploadtraining',
             data: formData,
             async: false,
             contentType: false,

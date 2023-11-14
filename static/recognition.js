@@ -99,7 +99,7 @@ window.addEventListener('load', function () {
 
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:8000/facerec/facerecognition',
+            url: '/facerec/facerecognition',
             data: formData,
             async: false,
             contentType: false,

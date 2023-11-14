@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+    redis_training:
+        container_name: redis_training
+        image: redis:6.2-alpine
+        ports:
+            - '6379:6379'
+        command: redis-server --save 20 1 --loglevel warning --requirepass 0ed8c2062b53422b87a9aa0d2e358cd0
+        volumes:
+            - cache:/data
+    facerec_redis:
+        container_name: facerec_redis
+        image: facerec_redis
+        build: 
+            context: .
+            dockerfile: Dockerfile
+        network_mode: host
+        volumes:
+            - ./datatraining:/code/datatraining
+        depends_on:
+            - redis_training
+volumes:
+    cache:
+        driver: local
+    facerec_redis:
+        driver: local

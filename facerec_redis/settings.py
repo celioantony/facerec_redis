@@ -10,8 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+from dotenv import load_dotenv
 from pathlib import Path
 import redis
+import os
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,13 +25,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(ako^epmkld4226r*hi+hs&_bq%unord)epvre*+8ji)4qk1b2'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
 
+DJANGO_DOMAIN = os.getenv('DJANGO_DOMAIN')
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 # Application definition
 
@@ -38,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'facerecognition'
+    'django_extensions',
+    'facerecognition',
 ]
 
 MIDDLEWARE = [
@@ -129,5 +137,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # REDIS CONN
 
-REDIS_CONN = redis.Redis(host="localhost", port=6379, decode_responses=False,
-                   password='0ed8c2062b53422b87a9aa0d2e358cd0')
+REDIS_CONN = redis.Redis(host=os.getenv('REDIS_HOST'), port=os.getenv('REDIS_PORT'), decode_responses=False,
+                         password=os.getenv('REDIS_PASSWORD'))
