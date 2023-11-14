@@ -3,6 +3,7 @@ import numpy as np
 from facerec_redis.settings import BASE_DIR
 from facerec_redis.settings import REDIS_CONN
 from .utils import to_redis
+import face_recognition
 
 client = REDIS_CONN
 
